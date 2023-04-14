@@ -1,7 +1,8 @@
 import asyncHandler from "express-async-handler";
 import CourierCompany from "../models/CourierCompany.js";
 import { genrateToken } from "../utils/Token.js";
-import { createCompanyMail } from "../services/MAIL.js";
+import { createCompanyMail, sendMail } from "../services/MAIL.js";
+import { genrateOTP } from "../services/OTP.js";
 
 export const createCompany = asyncHandler(async (req, res) => {
   if (!req.body) {
@@ -17,26 +18,70 @@ export const createCompany = asyncHandler(async (req, res) => {
   }
 
   try {
-    const comp = await CourierCompany.create({
+    const compCreated = await CourierCompany.create({
       name: req.body.name,
+      email: req.body.email,
       address: req.body.address,
       contactPerson: req.body.contactPerson,
-      logo: req.body.logo,
     });
 
-    if (comp) {
-      createCompanyMail({ to: req.body.email });
+    if (compCreated) {
       res.status(201).json({
-        _id: comp._id,
-        name: comp.name,
-        address: comp.address,
-        contactPerson: comp.address,
-        logo: comp.logo,
-        token: genrateToken(comp._id),
+        _id: compCreated._id,
+        name: compCreated.name,
+        address: compCreated.address,
+        contactPerson: compCreated.address,
+        token: genrateToken(compCreated._id),
       });
+      createCompanyMail({ to: req.body.email });
     }
   } catch (error) {
     res.status(400);
-    throw new Error("Server Overloaded :: ", error);
+    throw new Error("Server Overloaded......");
+  }
+});
+
+export const SendOTP = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const comp = await CourierCompany.findOne({ email });
+
+  if (comp) {
+    const otp = genrateOTP();
+    try {
+      sendMail({
+        to: email,
+        OTP: otp,
+      });
+
+      comp.otp = otp;
+
+      comp
+        .save()
+        .then(() => {
+          res.status(200).json("OTP is Send on Email");
+        })
+        .catch((err) => {
+          res.status(400).json(`Server Side Error Occur: ${err}`);
+        });
+    } catch (error) {
+      res.json(400).json(`Server Side Error Occured ${error}`);
+    }
+  }
+});
+
+export const VerifyEmail = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  const comp = await CourierCompany.findOne({ email });
+
+  if (comp && comp.otp === otp) {
+    res.status(200).json({ msg: "Email Verified Successfully", comp });
+  } else if (!comp) {
+    res.status(400);
+    throw new Error("User not found on these email");
+  } else {
+    res.status(400);
+    throw new Error("Invalid OTP is entered");
   }
 });

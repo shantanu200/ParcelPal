@@ -33,6 +33,9 @@ const courierCompany = new mongoose.Schema(
         ref: "Package",
       },
     ],
+    otp:{
+      type:String
+    }
   },
   { timestamps: true }
 );
