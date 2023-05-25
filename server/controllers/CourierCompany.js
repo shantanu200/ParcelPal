@@ -13,7 +13,7 @@ export const createCompany = asyncHandler(async (req, res) => {
   const compExists = await CourierCompany.findOne({ email: req.body.email });
 
   if (compExists) {
-    res.status(400);
+    res.status(400).json({ status: false, msg: "Already Company Registered" });
     throw new Error("Already Company Registered");
   }
 
@@ -36,7 +36,7 @@ export const createCompany = asyncHandler(async (req, res) => {
       createCompanyMail({ to: req.body.email });
     }
   } catch (error) {
-    res.status(400);
+    res.status(400).json({ status: false, msg: "Server Overloaded......" });
     throw new Error("Server Overloaded......");
   }
 });
@@ -67,6 +67,8 @@ export const SendOTP = asyncHandler(async (req, res) => {
     } catch (error) {
       res.json(400).json(`Server Side Error Occured ${error}`);
     }
+  } else {
+    res.status(400).json({ msg: "Email not exists in Database" });
   }
 });
 
@@ -78,10 +80,25 @@ export const VerifyEmail = asyncHandler(async (req, res) => {
   if (comp && comp.otp === otp) {
     res.status(200).json({ msg: "Email Verified Successfully", comp });
   } else if (!comp) {
-    res.status(400);
+    res.status(400).json({ msg: "User not found on these email" });
     throw new Error("User not found on these email");
   } else {
-    res.status(400);
+    res.status(400).json({ msg: "Invalid OTP is entered" });
     throw new Error("Invalid OTP is entered");
+  }
+});
+
+export const getCompDetailsByID = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+
+  if (id) {
+    const comp = await CourierCompany.findById(id);
+
+    if (comp) {
+      res.status(200).json(comp);
+    } else {
+      res.status(400).json({ status: false, msg: "Data Not Found on ID" });
+      throw new Error("Data Not Found on ID");
+    }
   }
 });

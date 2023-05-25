@@ -33,11 +33,11 @@ const courierCompany = new mongoose.Schema(
         ref: "Package",
       },
     ],
-    otp:{
-      type:String
-    }
+    otp: {
+      type: String,
+    },
   },
-  { timestamps: true }
+  { timestamps: true, strictPopulate: false }
 );
 
 export default mongoose.model("CourierCompany", courierCompany);

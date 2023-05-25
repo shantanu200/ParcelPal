@@ -4,7 +4,14 @@ export const puneGraph = {
   Baner: { Hinjawadi: 5, Wakad: 4, Aundh: 2, Shivajinagar: 8 },
   Aundh: { Hinjawadi: 7, Baner: 2, Shivajinagar: 6, Deccan: 9, Bavdhan: 12 },
   Deccan: { Aundh: 9, Shivajinagar: 3, Swargate: 6, Kothrud: 11 },
-  Shivajinagar: { Baner: 8, Aundh: 6, Deccan: 3, Swargate: 5, Hadapsar: 14, Kharadi: 10 },
+  Shivajinagar: {
+    Baner: 8,
+    Aundh: 6,
+    Deccan: 3,
+    Swargate: 5,
+    Hadapsar: 14,
+    Kharadi: 10,
+  },
   Swargate: { Shivajinagar: 5, Camp: 4, Deccan: 6, Katraj: 15 },
   Camp: { Swargate: 4, KoregaonPark: 6 },
   KoregaonPark: { Camp: 6, VimanNagar: 8 },
@@ -15,5 +22,29 @@ export const puneGraph = {
   Katraj: { Swargate: 15, Kothrud: 9 },
   Hadapsar: { Shivajinagar: 14, Kharadi: 4 },
   Kharadi: { Shivajinagar: 10, Yerwada: 9, Hadapsar: 4 },
-  Bavdhan: { Aundh: 12, Kothrud: 7 }
+  Bavdhan: { Aundh: 12, Kothrud: 7 },
+  Kondhwa: { Swargate: 10, Deccan: 2 },
+  Baner: { Hinjawadi: 5, Wakad: 4, Aundh: 2, Shivajinagar: 8 },
 };
+
+export const puneLocation = [
+  "Hinjawadi",
+  "Wakad",
+  "Baner",
+  "Aundh",
+  "Deccan",
+  "Shivajinagar",
+  "Swargate",
+  "Camp",
+  "KoregaonPark",
+  "VimanNagar",
+  "KalyaniNagar",
+  "Yerwada",
+  "Kothrud",
+  "Katraj",
+  "Hadapsar",
+  "Kharadi",
+  "Bavdhan",
+  "Kondhwa",
+  "Baner"
+];

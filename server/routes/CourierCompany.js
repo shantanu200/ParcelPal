@@ -1,5 +1,10 @@
 import express from "express";
-import { SendOTP, VerifyEmail, createCompany } from "../controllers/CourierCompany.js";
+import {
+  SendOTP,
+  VerifyEmail,
+  createCompany,
+  getCompDetailsByID,
+} from "../controllers/CourierCompany.js";
 
 const router = express.Router();
 
@@ -9,7 +14,7 @@ const router = express.Router();
  * Type :: POST
  */
 
-router.route('/').post(createCompany);
+router.route("/").post(createCompany);
 
 /**
  * Route :: `/sendOTP`
@@ -24,9 +29,14 @@ router.route("/sendOTP").post(SendOTP);
  * Type :: POST
  */
 
-router.route('/login').post(VerifyEmail);
+router.route("/login").post(VerifyEmail);
 
+/**
+ * Route :: `/details/:id`
+ * Operation :: Get Company Details By ID Key
+ * Type :: GET
+ */
 
-
+router.route("/details/:id").get(getCompDetailsByID);
 
 export default router;
